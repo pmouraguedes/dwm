@@ -1,5 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 #include <X11/XF86keysym.h>
+#include <X11/Xutil.h>
 
 #define TERMINAL "ghostty"
 #define BROWSER  "google-chrome-stable"
@@ -29,17 +30,40 @@ static const char *colors[][3]           = {
 	[SchemeSel]  = { col_gray4, col_cyan,  col_red },
 };
 
+typedef struct {
+	const char *name;
+	const void *cmd;
+} Sp;
+// the window title here must match the rules below
+const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
+const char *spcmd2[] = {"st", "-n", "spcalc", "-g", "50x20", "-e", "bc", "-lq", NULL };
+const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spyazi", "--title=spyazi", "-e", "yazi", NULL };
+const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
+const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
+static Sp scratchpads[] = {
+	/* name          cmd  */
+	{"spterm",      spcmd1},
+	{"spcalc",    spcmd2},
+	{"spyazi",   spcmd3},
+    {"spnotes",  spcmd4},
+    {"spgebitnotes", spcmd5},
+};
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Gimp",	  NULL,			  NULL,		0,				1,			 -1 },
+	{ "Firefox",  NULL,			  NULL,		1 << 8,			0,			 -1 },
+	{ NULL,		  "spterm",		  NULL,		SPTAG(0),		1,			 -1 },
+	{ NULL,		  "spcalc",		  NULL,		SPTAG(1),		1,			 -1 },
+	{ NULL,		  "spyazi",	      NULL,		SPTAG(2),		0,			 -1 },
+    { NULL,		  "spnotes",      NULL,		SPTAG(3),		0,			 -1 },
+    { NULL,       "spgebitnotes", NULL,     SPTAG(4),       0,           -1 },
 };
 
 /* layout(s) */
@@ -101,7 +125,6 @@ static const Key keys[] = {
     { ControlMask|Mod4Mask,               XK_c,                    spawn,          {.v = roficlip_cmd } },
     // { ControlMask|Mod4Mask,            XK_v,                    spawn,          SHCMD("rofi-clip -p") },
     { ControlMask|Mod4Mask,               XK_p,                    spawn,          {.v = rofipass_cmd } },
-    { MODKEY|ShiftMask,                   XK_Return,               spawn,          {.v = termcmd } },
     // { ControlMask|Mod4Mask,            XK_c,                    spawn,          SHCMD("rofi-clip") },
     { MODKEY,                             XK_w,                    spawn,          {.v = (const char*[]){ BROWSER,  NULL } } },
     { MODKEY,                             XK_s,                    togglesticky,   {0} },
@@ -149,9 +172,14 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,                   XK_q,                    quit,           {0} },
     { MODKEY,                             XK_h,                    setmfact,       {.f = -0.05} },                  // Shrink master window
     { MODKEY,                             XK_l,                    setmfact,       {.f = +0.05} },                  // Grow master window
-	{ MODKEY|ShiftMask,                   XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "htop", NULL } } },
-	{ MODKEY,                   XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "yazi", NULL } } },
-	{ MODKEY|ShiftMask,                   XK_w,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "connmanctl", NULL } } },
+	// { MODKEY|ShiftMask,                   XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "htop",       NULL } } },
+	// { MODKEY,                             XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "yazi",       NULL } } },
+	// { MODKEY|ShiftMask,                   XK_w,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "connmanctl", NULL } } },
+	{ MODKEY|ShiftMask,                   XK_Return,                    togglescratch,  {.ui = 0 } }, // terminal
+	{ MODKEY,                             XK_apostrophe,                    togglescratch,  {.ui = 1 } }, // calculator
+	{ MODKEY,                             XK_e,                    togglescratch,  {.ui = 2 } },
+    { MODKEY,                             XK_n,                    togglescratch,  {.ui = 3 } }, // notes
+    { MODKEY|ShiftMask,                   XK_n,                    togglescratch,  {.ui = 4 } }, // gebit notes
 };
 
 /* button definitions */
