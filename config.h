@@ -37,9 +37,9 @@ typedef struct {
 // the window title here must match the rules below
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spcalc", "-g", "50x20", "-e", "bc", "-lq", NULL };
-const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spyazi", "--title=spyazi", "-e", "yazi", NULL };
-const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
-const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
+const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spyazi", "--title=spyazi", "--window-height=50", "--window-width=240", "-e", "yazi", NULL };
+const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
+const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
@@ -61,9 +61,9 @@ static const Rule rules[] = {
 	{ "Firefox",  NULL,			  NULL,		1 << 8,			0,			 -1 },
 	{ NULL,		  "spterm",		  NULL,		SPTAG(0),		1,			 -1 },
 	{ NULL,		  "spcalc",		  NULL,		SPTAG(1),		1,			 -1 },
-	{ NULL,		  "spyazi",	      NULL,		SPTAG(2),		0,			 -1 },
-    { NULL,		  "spnotes",      NULL,		SPTAG(3),		0,			 -1 },
-    { NULL,       "spgebitnotes", NULL,     SPTAG(4),       0,           -1 },
+	{ NULL,		  "spyazi",	      NULL,		SPTAG(2),		1,			 -1 },
+    { NULL,		  "spnotes",      NULL,		SPTAG(3),		1,			 -1 },
+    { NULL,       "spgebitnotes", NULL,     SPTAG(4),       1,           -1 },
 };
 
 /* layout(s) */
@@ -177,7 +177,7 @@ static const Key keys[] = {
 	// { MODKEY|ShiftMask,                   XK_w,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "connmanctl", NULL } } },
 	{ MODKEY|ShiftMask,                   XK_Return,                    togglescratch,  {.ui = 0 } }, // terminal
 	{ MODKEY,                             XK_apostrophe,                    togglescratch,  {.ui = 1 } }, // calculator
-	{ MODKEY,                             XK_e,                    togglescratch,  {.ui = 2 } },
+	{ MODKEY,                             XK_e,                    togglescratch,  {.ui = 2 } }, // yazi
     { MODKEY,                             XK_n,                    togglescratch,  {.ui = 3 } }, // notes
     { MODKEY|ShiftMask,                   XK_n,                    togglescratch,  {.ui = 4 } }, // gebit notes
 };
