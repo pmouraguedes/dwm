@@ -39,7 +39,7 @@ const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spcalc", "-g", "50x20", "-e", "bc", "-lq", NULL };
 const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spyazi", "--title=spyazi", "--window-height=50", "--window-width=240", "-e", "yazi", NULL };
 const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
-const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
+const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spgebitnotes", "--title=spgebitnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
@@ -154,7 +154,7 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,                   XK_o,                    setlayout,      {.v = &layouts[8]} },            // bstackhoriz
 	{ MODKEY|ControlMask,                 XK_comma,                cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,                 XK_period,               cyclelayout,    {.i = +1 } },
-	// { MODKEY,                          XK_space,                setlayout,      {0} },
+	{ MODKEY,                          XK_space,                setlayout,      {0} },
 	{ MODKEY|ShiftMask,                   XK_space,                togglefloating, {0} },
 	{ MODKEY,                             XK_0,                    view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,                   XK_0,                    tag,            {.ui = ~0 } },
