@@ -107,6 +107,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "rofi", "-show", "drun", "-show-icons", NULL };
 static const char *runcmd[] = { "rofi", "-show", "run", "-show-icons", NULL };
+static const char *rofiwindowcmd[] = { "rofi", "-show", "window", "-show-icons", NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 static const char *roficlip_cmd[]  = { "rofi-clip", NULL };
 static const char *rofipass_cmd[]  = { "rofi-pass", NULL };
@@ -131,6 +132,7 @@ static const Key keys[] = {
 	{ MODKEY,                             XK_d,                    spawn,          {.v = dmenucmd } },
 	{ MODKEY,                             XK_F2,                   spawn,          {.v = runcmd } },
 	{ MODKEY,                             XK_Return,               spawn,          {.v = termcmd } },
+	{ Mod1Mask,                           XK_Tab,                  spawn,          {.v = rofiwindowcmd } },
 	{ MODKEY,                             XK_b,                    togglebar,      {0} },
 	{ MODKEY,                             XK_j,                    focusstack,     {.i = +1 } },
 	{ MODKEY,                             XK_k,                    focusstack,     {.i = -1 } },
