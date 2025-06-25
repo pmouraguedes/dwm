@@ -56,14 +56,16 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",	  NULL,			  NULL,		0,				1,			 -1 },
-	{ "Firefox",  NULL,			  NULL,		1 << 8,			0,			 -1 },
-	{ NULL,		  "spterm",		  NULL,		SPTAG(0),		1,			 -1 },
-	{ NULL,		  "spcalc",		  NULL,		SPTAG(1),		1,			 -1 },
-	{ NULL,		  "spyazi",	      NULL,		SPTAG(2),		1,			 -1 },
-    { NULL,		  "spnotes",      NULL,		SPTAG(3),		1,			 -1 },
-    { NULL,       "spgebitnotes", NULL,     SPTAG(4),       1,           -1 },
+	/* class,    instance,       title,                                   tags mask, isfloating, monitor */
+	{ "Gimp",    NULL,           NULL,                                    0,         1,          -1 },
+	{ "Firefox", NULL,           NULL,                                    1 << 8,    0,          -1 },
+	{ NULL,      NULL,           "VSS Dev Tools",                         0,         1,          -1 },
+	{ NULL,      NULL,           "[dev-tools - assco local-core-dn-sco]", 0,         1,          -1 },
+	{ NULL,      "spterm",       NULL,                                    SPTAG(0),  1,          -1 },
+	{ NULL,      "spcalc",       NULL,                                    SPTAG(1),  1,          -1 },
+	{ NULL,      "spyazi",       NULL,                                    SPTAG(2),  1,          -1 },
+    { NULL,      "spnotes",      NULL,                                    SPTAG(3),  1,          -1 },
+    { NULL,      "spgebitnotes", NULL,                                    SPTAG(4),  1,          -1 },
 };
 
 /* layout(s) */
@@ -109,6 +111,7 @@ static const char *dmenucmd[] = { "rofi", "-show", "drun", "-show-icons", NULL }
 static const char *runcmd[] = { "rofi", "-show", "run", "-show-icons", NULL };
 static const char *rofiwindowcmd[] = { "rofi", "-show", "window", "-show-icons", NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
+// static const char *termcmd[]  = { "tabbed", "-cr", "2", "st", "-w", "''", NULL };
 static const char *roficlip_cmd[]  = { "rofi-clip", NULL };
 static const char *rofipass_cmd[]  = { "rofi-pass", NULL };
 static const char *volupcmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05+", NULL };
