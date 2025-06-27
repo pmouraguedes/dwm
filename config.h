@@ -59,8 +59,10 @@ static const Rule rules[] = {
 	/* class,    instance,       title,                                   tags mask, isfloating, monitor */
 	{ "Gimp",    NULL,           NULL,                                    0,         1,          -1 },
 	{ "Firefox", NULL,           NULL,                                    1 << 8,    0,          -1 },
-	{ NULL,      NULL,           "VSS Dev Tools",                         0,         1,          -1 },
-	{ NULL,      NULL,           "[dev-tools - assco local-core-dn-sco]", 0,         1,          -1 },
+	{ NULL,      NULL,           "TPiSCAN Test DevStation",               1 << 4,    1,          -1 },
+	{ NULL,      NULL,           "VSS Dev Tools",                         1 << 4,    1,          -1 },
+	{ NULL,      NULL,           "[dev-tools - assco local-core-dn-sco]", 1 << 4,    1,          -1 },
+	{ NULL,      NULL,           "Lane Proxy 4711",                       1 << 4,    1,          -1 },
 	{ NULL,      "spterm",       NULL,                                    SPTAG(0),  1,          -1 },
 	{ NULL,      "spcalc",       NULL,                                    SPTAG(1),  1,          -1 },
 	{ NULL,      "spyazi",       NULL,                                    SPTAG(2),  1,          -1 },
