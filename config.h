@@ -59,10 +59,10 @@ static const Rule rules[] = {
 	/* class,    instance,       title,                                   tags mask, isfloating, monitor */
 	{ "Gimp",    NULL,           NULL,                                    0,         1,          -1 },
 	{ "Firefox", NULL,           NULL,                                    1 << 8,    0,          -1 },
-	{ NULL,      NULL,           "TPiSCAN Test DevStation",               1 << 4,    1,          -1 },
-	{ NULL,      NULL,           "VSS Dev Tools",                         1 << 4,    1,          -1 },
-	{ NULL,      NULL,           "[dev-tools - assco local-core-dn-sco]", 1 << 4,    1,          -1 },
-	{ NULL,      NULL,           "Lane Proxy 4711",                       1 << 4,    1,          -1 },
+	{ NULL,      NULL,           "TPiSCAN Test DevStation",               1 << 3,    1,          -1 },
+	{ NULL,      NULL,           "VSS Dev Tools",                         1 << 3,    1,          -1 },
+	{ NULL,      NULL,           "[dev-tools - assco local-core-dn-sco]", 1 << 3,    1,          -1 },
+	{ NULL,      NULL,           "Lane Proxy 4711",                       1 << 3,    1,          -1 },
 	{ NULL,      "spterm",       NULL,                                    SPTAG(0),  1,          -1 },
 	{ NULL,      "spcalc",       NULL,                                    SPTAG(1),  1,          -1 },
 	{ NULL,      "spyazi",       NULL,                                    SPTAG(2),  1,          -1 },
@@ -143,8 +143,8 @@ static const Key keys[] = {
 	{ MODKEY,                             XK_k,                    focusstack,     {.i = -1 } },
 	{ MODKEY,                             XK_o,                    incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,                   XK_o,                    incnmaster,     {.i = -1 } },
-	{ MODKEY,                             XK_h,                    setmfact,       {.f = -0.05} },
-	{ MODKEY,                             XK_l,                    setmfact,       {.f = +0.05} },
+    { MODKEY,                             XK_comma,                    setmfact,       {.f = -0.05} },                  // Shrink master window
+    { MODKEY,                             XK_period,                    setmfact,       {.f = +0.05} },                  // Grow master window
 	{ MODKEY,                             XK_space,                zoom,           {0} },
 	{ MODKEY,                             XK_Tab,                  view,           {0} },
 	{ MODKEY,                             XK_q,                    killclient,     {0} },
@@ -152,21 +152,21 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,                   XK_g,                    setlayout,      {.v = &layouts[1]} },            // grid
     { MODKEY|ShiftMask,                   XK_t,                    setlayout,      {.v = &layouts[2]} },            // tile
     { MODKEY|ShiftMask,                   XK_f,                    setlayout,      {.v = &layouts[3]} },            // floating
-    { MODKEY,                             XK_c,                    setlayout,      {.v = &layouts[4]} },            // centeredmaster
-    { MODKEY|ShiftMask,                   XK_c,                    setlayout,      {.v = &layouts[5]} },            // centeredfloatingmaster
+    // { MODKEY,                             XK_c,                    setlayout,      {.v = &layouts[4]} },            // centeredmaster
+    // { MODKEY|ShiftMask,                   XK_c,                    setlayout,      {.v = &layouts[5]} },            // centeredfloatingmaster
     { MODKEY|ShiftMask,                   XK_d,                    setlayout,      {.v = &layouts[6]} },            // deck
-    { MODKEY|ShiftMask,                   XK_u,                    setlayout,      {.v = &layouts[7]} },            // bstack
-    { MODKEY|ShiftMask,                   XK_o,                    setlayout,      {.v = &layouts[8]} },            // bstackhoriz
+    // { MODKEY|ShiftMask,                   XK_u,                    setlayout,      {.v = &layouts[7]} },            // bstack
+    // { MODKEY|ShiftMask,                   XK_o,                    setlayout,      {.v = &layouts[8]} },            // bstackhoriz
 	{ MODKEY|ControlMask,                 XK_comma,                cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,                 XK_period,               cyclelayout,    {.i = +1 } },
 	{ MODKEY,                          XK_space,                setlayout,      {0} },
 	{ MODKEY|ShiftMask,                   XK_space,                togglefloating, {0} },
 	{ MODKEY,                             XK_0,                    view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,                   XK_0,                    tag,            {.ui = ~0 } },
-	{ MODKEY,                             XK_comma,                focusmon,       {.i = -1 } },
-	{ MODKEY,                             XK_period,               focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,                   XK_comma,                tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,                   XK_period,               tagmon,         {.i = +1 } },
+	{ MODKEY,                             XK_h,                focusmon,       {.i = -1 } },
+	{ MODKEY,                             XK_l,               focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,                   XK_h,                tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,                   XK_l,               tagmon,         {.i = +1 } },
 	TAGKEYS(                        XK_1, 0)
 	TAGKEYS(                        XK_2, 1)
 	TAGKEYS(                        XK_3, 2)
@@ -177,8 +177,6 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8, 7)
 	TAGKEYS(                        XK_9, 8)
 	{ MODKEY|ShiftMask,                   XK_q,                    quit,           {0} },
-    { MODKEY,                             XK_h,                    setmfact,       {.f = -0.05} },                  // Shrink master window
-    { MODKEY,                             XK_l,                    setmfact,       {.f = +0.05} },                  // Grow master window
 	// { MODKEY|ShiftMask,                   XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "htop",       NULL } } },
 	// { MODKEY,                             XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "yazi",       NULL } } },
 	// { MODKEY|ShiftMask,                   XK_w,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "connmanctl", NULL } } },
