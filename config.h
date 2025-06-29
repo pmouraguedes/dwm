@@ -185,6 +185,22 @@ static const Key keys[] = {
 	{ MODKEY,                             XK_e,                    togglescratch,  {.ui = 2 } }, // yazi
     { MODKEY,                             XK_n,                    togglescratch,  {.ui = 3 } }, // notes
     { MODKEY|ShiftMask,                   XK_n,                    togglescratch,  {.ui = 4 } }, // gebit notes
+	{ MODKEY,                       XK_Down,   moveresize,     {.v = "0x 75y 0w 0h" } },
+	{ MODKEY,                       XK_Up,     moveresize,     {.v = "0x -75y 0w 0h" } },
+	{ MODKEY,                       XK_Right,  moveresize,     {.v = "75x 0y 0w 0h" } },
+	{ MODKEY,                       XK_Left,   moveresize,     {.v = "-75x 0y 0w 0h" } },
+	{ MODKEY|ShiftMask,             XK_Down,   moveresize,     {.v = "0x 0y 0w 75h" } },
+	{ MODKEY|ShiftMask,             XK_Up,     moveresize,     {.v = "0x 0y 0w -75h" } },
+	{ MODKEY|ShiftMask,             XK_Right,  moveresize,     {.v = "0x 0y 75w 0h" } },
+	{ MODKEY|ShiftMask,             XK_Left,   moveresize,     {.v = "0x 0y -75w 0h" } },
+	{ MODKEY|ControlMask,           XK_Up,     moveresizeedge, {.v = "t"} },
+	{ MODKEY|ControlMask,           XK_Down,   moveresizeedge, {.v = "b"} },
+	{ MODKEY|ControlMask,           XK_Left,   moveresizeedge, {.v = "l"} },
+	{ MODKEY|ControlMask,           XK_Right,  moveresizeedge, {.v = "r"} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Up,     moveresizeedge, {.v = "T"} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Down,   moveresizeedge, {.v = "B"} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Left,   moveresizeedge, {.v = "L"} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Right,  moveresizeedge, {.v = "R"} },
 };
 
 /* button definitions */
