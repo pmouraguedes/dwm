@@ -13,8 +13,10 @@ static const unsigned int systrayonleft  = 0;    /* 0: systray in the right corn
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray             = 1;        /* 0 means no systray */
-static const int showbar                 = 1;        /* 0 means no bar */
-static const int topbar                  = 1;        /* 0 means bottom bar */
+static const int showbar            = 1;        /* 0 means no standard bar */
+static const int topbar             = 1;        /* 0 means standard bar at bottom */
+static const int extrabar           = 1;        /* 0 means no extra bar */
+static const char statussep         = ';';      /* separator between statuses */
 static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=11", "Noto Sans:size=11", "Noto Color Emoji:size=16" };
 static const char dmenufont[]            = "monospace:size=11";
 static const char col_gray1[]            = "#222222";
@@ -144,6 +146,7 @@ static const Key keys[] = {
 	{ MODKEY,                             XK_Return,               spawn,          {.v = termcmd } },
 	{ Mod1Mask,                           XK_Tab,                  spawn,          {.v = rofiwindowcmd } },
 	{ MODKEY,                             XK_b,                    togglebar,      {0} },
+	{ MODKEY|ShiftMask,                   XK_b,                    toggleextrabar, {0} },
 	{ MODKEY,                             XK_j,                    focusstack,     {.i = +1 } },
 	{ MODKEY,                             XK_k,                    focusstack,     {.i = -1 } },
 	{ MODKEY,                             XK_o,                    incnmaster,     {.i = +1 } },
@@ -217,6 +220,9 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkExBarLeftStatus,   0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkExBarMiddle,       0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkExBarRightStatus,  0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
