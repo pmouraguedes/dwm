@@ -40,6 +40,7 @@ const char *spcmd2[] = {"st", "-n", "spcalc", "-g", "50x20", "-e", "bc", "-lq", 
 const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spyazi", "--title=spyazi", "--window-height=50", "--window-width=240", "-e", "yazi", NULL };
 const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
 const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spgebitnotes", "--title=spgebitnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
+const char *spcmd6[] = { TERMINAL, "--x11-instance-name=speditscratch", "--title=speditscratch", "--window-height=50", "--window-width=240", "-e", "cd ~/tmp && nvim -c 'bd' 'bd'", NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
@@ -47,6 +48,7 @@ static Sp scratchpads[] = {
 	{"spyazi",   spcmd3},
     {"spnotes",  spcmd4},
     {"spgebitnotes", spcmd5},
+    {"speditscratch", spcmd6},
 };
 
 /* tagging */
@@ -56,18 +58,19 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class,    instance,       title,                                   tags mask, isfloating, monitor */
-	{ "Gimp",    NULL,           NULL,                                    0,         1,          -1 },
-	{ "Firefox", NULL,           NULL,                                    1 << 8,    0,          -1 },
-	{ NULL,      NULL,           "TPiSCAN Test DevStation",               1 << 3,    1,          -1 },
-	{ NULL,      NULL,           "VSS Dev Tools",                         1 << 3,    1,          -1 },
-	{ NULL,      NULL,           "[dev-tools - assco local-core-dn-sco]", 1 << 3,    1,          -1 },
-	{ NULL,      NULL,           "Lane Proxy 4711",                       1 << 3,    1,          -1 },
-	{ NULL,      "spterm",       NULL,                                    SPTAG(0),  1,          -1 },
-	{ NULL,      "spcalc",       NULL,                                    SPTAG(1),  1,          -1 },
-	{ NULL,      "spyazi",       NULL,                                    SPTAG(2),  1,          -1 },
-    { NULL,      "spnotes",      NULL,                                    SPTAG(3),  1,          -1 },
-    { NULL,      "spgebitnotes", NULL,                                    SPTAG(4),  1,          -1 },
+	/* class,    instance,        title,                                   tags mask, isfloating, monitor */
+	{ "Gimp",    NULL,            NULL,                                    0,         1,          -1 },
+	{ "Firefox", NULL,            NULL,                                    1 << 8,    0,          -1 },
+	{ NULL,      NULL,            "TPiSCAN Test DevStation",               1 << 3,    1,          -1 },
+	{ NULL,      NULL,            "VSS Dev Tools",                         1 << 3,    1,          -1 },
+	{ NULL,      NULL,            "[dev-tools - assco local-core-dn-sco]", 1 << 3,    1,          -1 },
+	{ NULL,      NULL,            "Lane Proxy 4711",                       1 << 3,    1,          -1 },
+	{ NULL,      "spterm",        NULL,                                    SPTAG(0),  1,          -1 },
+	{ NULL,      "spcalc",        NULL,                                    SPTAG(1),  1,          -1 },
+	{ NULL,      "spyazi",        NULL,                                    SPTAG(2),  1,          -1 },
+    { NULL,      "spnotes",       NULL,                                    SPTAG(3),  1,          -1 },
+    { NULL,      "spgebitnotes",  NULL,                                    SPTAG(4),  1,          -1 },
+    { NULL,      "speditscratch", NULL,                                    SPTAG(5),  1,          -1 },
 };
 
 /* layout(s) */
@@ -119,6 +122,7 @@ static const char *rofipass_cmd[]  = { "rofi-pass", NULL };
 static const char *volupcmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05+", NULL };
 static const char *voldowncmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05-", NULL };
 static const char *volmutecmd[] = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
+static const char *matrix_cmd[]  = { "cmatrix", "-f", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -127,12 +131,13 @@ static const Key keys[] = {
     { 0,                                  XF86XK_AudioRaiseVolume, spawn,          {.v = volupcmd } },
     { 0,                                  XF86XK_AudioLowerVolume, spawn,          {.v = voldowncmd } },
     { 0,                                  XF86XK_AudioMute,        spawn,          {.v = volmutecmd } },
-    { 0,                                  XK_Print,                spawn,          SHCMD("maim -s | xclip -selection clipboard -t image/png") },
+    { 0,                                  XK_Print,                spawn,          SHCMD("maim -s -b 5 | xclip -selection clipboard -t image/png") },
     { ControlMask|Mod4Mask,               XK_c,                    spawn,          {.v = roficlip_cmd } },
     // { ControlMask|Mod4Mask,            XK_v,                    spawn,          SHCMD("rofi-clip -p") },
     { ControlMask|Mod4Mask,               XK_p,                    spawn,          {.v = rofipass_cmd } },
     // { ControlMask|Mod4Mask,            XK_c,                    spawn,          SHCMD("rofi-clip") },
     { MODKEY,                             XK_w,                    spawn,          {.v = (const char*[]){ BROWSER,  NULL } } },
+    { MODKEY,                             XK_m,                    spawn,          {.v = matrix_cmd } },
     { MODKEY,                             XK_s,                    togglesticky,   {0} },
 	{ MODKEY,                             XK_d,                    spawn,          {.v = dmenucmd } },
 	{ MODKEY,                             XK_F2,                   spawn,          {.v = runcmd } },
@@ -143,8 +148,8 @@ static const Key keys[] = {
 	{ MODKEY,                             XK_k,                    focusstack,     {.i = -1 } },
 	{ MODKEY,                             XK_o,                    incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,                   XK_o,                    incnmaster,     {.i = -1 } },
-    { MODKEY,                             XK_comma,                    setmfact,       {.f = -0.05} },                  // Shrink master window
-    { MODKEY,                             XK_period,                    setmfact,       {.f = +0.05} },                  // Grow master window
+    { MODKEY,                             XK_comma,                setmfact,       {.f = -0.05} },                  // Shrink master window
+    { MODKEY,                             XK_period,               setmfact,       {.f = +0.05} },                  // Grow master window
 	{ MODKEY,                             XK_space,                zoom,           {0} },
 	{ MODKEY,                             XK_Tab,                  view,           {0} },
 	{ MODKEY,                             XK_q,                    killclient,     {0} },
@@ -152,21 +157,21 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,                   XK_g,                    setlayout,      {.v = &layouts[1]} },            // grid
     { MODKEY|ShiftMask,                   XK_t,                    setlayout,      {.v = &layouts[2]} },            // tile
     { MODKEY|ShiftMask,                   XK_f,                    setlayout,      {.v = &layouts[3]} },            // floating
-    // { MODKEY,                             XK_c,                    setlayout,      {.v = &layouts[4]} },            // centeredmaster
-    // { MODKEY|ShiftMask,                   XK_c,                    setlayout,      {.v = &layouts[5]} },            // centeredfloatingmaster
+    // { MODKEY,                          XK_c,                    setlayout,      {.v = &layouts[4]} },            // centeredmaster
+    // { MODKEY|ShiftMask,                XK_c,                    setlayout,      {.v = &layouts[5]} },            // centeredfloatingmaster
     { MODKEY|ShiftMask,                   XK_d,                    setlayout,      {.v = &layouts[6]} },            // deck
-    // { MODKEY|ShiftMask,                   XK_u,                    setlayout,      {.v = &layouts[7]} },            // bstack
-    // { MODKEY|ShiftMask,                   XK_o,                    setlayout,      {.v = &layouts[8]} },            // bstackhoriz
+    // { MODKEY|ShiftMask,                XK_u,                    setlayout,      {.v = &layouts[7]} },            // bstack
+    // { MODKEY|ShiftMask,                XK_o,                    setlayout,      {.v = &layouts[8]} },            // bstackhoriz
 	{ MODKEY|ControlMask,                 XK_comma,                cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,                 XK_period,               cyclelayout,    {.i = +1 } },
-	{ MODKEY,                          XK_space,                setlayout,      {0} },
+	{ MODKEY,                             XK_space,                setlayout,      {0} },
 	{ MODKEY|ShiftMask,                   XK_space,                togglefloating, {0} },
 	{ MODKEY,                             XK_0,                    view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,                   XK_0,                    tag,            {.ui = ~0 } },
-	{ MODKEY,                             XK_h,                focusmon,       {.i = -1 } },
-	{ MODKEY,                             XK_l,               focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,                   XK_h,                tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,                   XK_l,               tagmon,         {.i = +1 } },
+	{ MODKEY,                             XK_h,                    focusmon,       {.i = -1 } },
+	{ MODKEY,                             XK_l,                    focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,                   XK_h,                    tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,                   XK_l,                    tagmon,         {.i = +1 } },
 	TAGKEYS(                        XK_1, 0)
 	TAGKEYS(                        XK_2, 1)
 	TAGKEYS(                        XK_3, 2)
@@ -177,30 +182,31 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8, 7)
 	TAGKEYS(                        XK_9, 8)
 	{ MODKEY|ShiftMask,                   XK_q,                    quit,           {0} },
-	// { MODKEY|ShiftMask,                   XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "htop",       NULL } } },
-	// { MODKEY,                             XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "yazi",       NULL } } },
-	// { MODKEY|ShiftMask,                   XK_w,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "connmanctl", NULL } } },
-	{ MODKEY|ShiftMask,                   XK_Return,                    togglescratch,  {.ui = 0 } }, // terminal
-	{ MODKEY,                             XK_apostrophe,                    togglescratch,  {.ui = 1 } }, // calculator
-	{ MODKEY,                             XK_e,                    togglescratch,  {.ui = 2 } }, // yazi
-    { MODKEY,                             XK_n,                    togglescratch,  {.ui = 3 } }, // notes
-    { MODKEY|ShiftMask,                   XK_n,                    togglescratch,  {.ui = 4 } }, // gebit notes
-	{ MODKEY,                       XK_Down,   moveresize,     {.v = "0x 75y 0w 0h" } },
-	{ MODKEY,                       XK_Up,     moveresize,     {.v = "0x -75y 0w 0h" } },
-	{ MODKEY,                       XK_Right,  moveresize,     {.v = "75x 0y 0w 0h" } },
-	{ MODKEY,                       XK_Left,   moveresize,     {.v = "-75x 0y 0w 0h" } },
-	{ MODKEY|ShiftMask,             XK_Down,   moveresize,     {.v = "0x 0y 0w 75h" } },
-	{ MODKEY|ShiftMask,             XK_Up,     moveresize,     {.v = "0x 0y 0w -75h" } },
-	{ MODKEY|ShiftMask,             XK_Right,  moveresize,     {.v = "0x 0y 75w 0h" } },
-	{ MODKEY|ShiftMask,             XK_Left,   moveresize,     {.v = "0x 0y -75w 0h" } },
-	{ MODKEY|ControlMask,           XK_Up,     moveresizeedge, {.v = "t"} },
-	{ MODKEY|ControlMask,           XK_Down,   moveresizeedge, {.v = "b"} },
-	{ MODKEY|ControlMask,           XK_Left,   moveresizeedge, {.v = "l"} },
-	{ MODKEY|ControlMask,           XK_Right,  moveresizeedge, {.v = "r"} },
-	{ MODKEY|ControlMask|ShiftMask, XK_Up,     moveresizeedge, {.v = "T"} },
-	{ MODKEY|ControlMask|ShiftMask, XK_Down,   moveresizeedge, {.v = "B"} },
-	{ MODKEY|ControlMask|ShiftMask, XK_Left,   moveresizeedge, {.v = "L"} },
-	{ MODKEY|ControlMask|ShiftMask, XK_Right,  moveresizeedge, {.v = "R"} },
+	// { MODKEY|ShiftMask,                XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "htop",       NULL } } },
+	// { MODKEY,                          XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "yazi",       NULL } } },
+	// { MODKEY|ShiftMask,                XK_w,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "connmanctl", NULL } } },
+	{ MODKEY|ShiftMask,                   XK_Return,               togglescratch,  {.ui = 0 } },                    // terminal
+	{ MODKEY,                             XK_apostrophe,           togglescratch,  {.ui = 1 } },                    // calculator
+	{ MODKEY,                             XK_e,                    togglescratch,  {.ui = 2 } },                    // yazi
+    { MODKEY,                             XK_n,                    togglescratch,  {.ui = 3 } },                    // notes
+    { MODKEY|ShiftMask,                   XK_n,                    togglescratch,  {.ui = 4 } },                    // gebit notes
+    { MODKEY|ShiftMask,                   XK_e,                    togglescratch,  {.ui = 5 } },                    // scratch edit
+	{ MODKEY,                             XK_Down,                 moveresize,     {.v = "0x 75y 0w 0h" } },
+	{ MODKEY,                             XK_Up,                   moveresize,     {.v = "0x -75y 0w 0h" } },
+	{ MODKEY,                             XK_Right,                moveresize,     {.v = "75x 0y 0w 0h" } },
+	{ MODKEY,                             XK_Left,                 moveresize,     {.v = "-75x 0y 0w 0h" } },
+	{ MODKEY|ShiftMask,                   XK_Down,                 moveresize,     {.v = "0x 0y 0w 75h" } },
+	{ MODKEY|ShiftMask,                   XK_Up,                   moveresize,     {.v = "0x 0y 0w -75h" } },
+	{ MODKEY|ShiftMask,                   XK_Right,                moveresize,     {.v = "0x 0y 75w 0h" } },
+	{ MODKEY|ShiftMask,                   XK_Left,                 moveresize,     {.v = "0x 0y -75w 0h" } },
+	{ MODKEY|ControlMask,                 XK_Up,                   moveresizeedge, {.v = "t"} },
+	{ MODKEY|ControlMask,                 XK_Down,                 moveresizeedge, {.v = "b"} },
+	{ MODKEY|ControlMask,                 XK_Left,                 moveresizeedge, {.v = "l"} },
+	{ MODKEY|ControlMask,                 XK_Right,                moveresizeedge, {.v = "r"} },
+	{ MODKEY|ControlMask|ShiftMask,       XK_Up,                   moveresizeedge, {.v = "T"} },
+	{ MODKEY|ControlMask|ShiftMask,       XK_Down,                 moveresizeedge, {.v = "B"} },
+	{ MODKEY|ControlMask|ShiftMask,       XK_Left,                 moveresizeedge, {.v = "L"} },
+	{ MODKEY|ControlMask|ShiftMask,       XK_Right,                moveresizeedge, {.v = "R"} },
 };
 
 /* button definitions */
