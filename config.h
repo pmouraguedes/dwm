@@ -30,6 +30,8 @@ static const char *colors[][3]           = {
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeInv]  = { col_gray1, col_gray3, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_red },
+	[SchemeHov]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeHid]  = { col_cyan,  col_gray1, col_cyan  },
 };
 
 typedef struct {
@@ -147,8 +149,10 @@ static const Key keys[] = {
 	{ Mod1Mask,                           XK_Tab,                  spawn,          {.v = rofiwindowcmd } },
 	{ MODKEY,                             XK_b,                    togglebar,      {0} },
 	{ MODKEY|ShiftMask,                   XK_b,                    toggleextrabar, {0} },
-	{ MODKEY,                             XK_j,                    focusstack,     {.i = +1 } },
-	{ MODKEY,                             XK_k,                    focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },
+	{ MODKEY,                       XK_k,      focusstackvis,  {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_j,      focusstackhid,  {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,      focusstackhid,  {.i = -1 } },
 	{ MODKEY,                             XK_o,                    incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,                   XK_o,                    incnmaster,     {.i = -1 } },
     { MODKEY,                             XK_comma,                setmfact,       {.f = -0.05} },                  // Shrink master window
@@ -210,6 +214,9 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask,       XK_Down,                 moveresizeedge, {.v = "B"} },
 	{ MODKEY|ControlMask|ShiftMask,       XK_Left,                 moveresizeedge, {.v = "L"} },
 	{ MODKEY|ControlMask|ShiftMask,       XK_Right,                moveresizeedge, {.v = "R"} },
+	{ MODKEY,                       XK_a,      show,           {0} },
+	{ MODKEY|ShiftMask,             XK_s,      showall,        {0} },
+	{ MODKEY,                       XK_i,      hide,           {0} },
 };
 
 /* button definitions */
@@ -218,6 +225,7 @@ static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkExBarLeftStatus,   0,              Button2,        spawn,          {.v = termcmd } },
