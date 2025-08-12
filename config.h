@@ -15,9 +15,11 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray             = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no standard bar */
 static const int topbar             = 1;        /* 0 means standard bar at bottom */
-static const int extrabar           = 1;        /* 0 means no extra bar */
+static const int extrabar           = 0;        /* 0 means no extra bar */
 static const char statussep         = ';';      /* separator between statuses */
-static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=11", "Noto Sans:size=11", "Noto Color Emoji:size=16" };
+#define ICONSIZE bh   /* icon size */
+#define ICONSPACING 12 /* space between icon and title */
+static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=10", "Noto Sans:size=10", "Noto Color Emoji:size=15" };
 static const char dmenufont[]            = "monospace:size=11";
 static const char col_gray1[]            = "#222222";
 static const char col_gray2[]            = "#444444";
