@@ -19,6 +19,8 @@ static const int extrabar           = 0;        /* 0 means no extra bar */
 static const char statussep         = ';';      /* separator between statuses */
 #define ICONSIZE bh   /* icon size */
 #define ICONSPACING 12 /* space between icon and title */
+static const int vertpad            = 10;       /* vertical padding of bar */
+static const int sidepad            = 10;       /* horizontal padding of bar */
 static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=10", "Noto Sans:size=10", "Noto Color Emoji:size=15" };
 static const char dmenufont[]            = "monospace:size=11";
 static const char col_gray1[]            = "#222222";
@@ -181,6 +183,7 @@ static const Key keys[] = {
 	{ MODKEY,                             XK_l,                    focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,                   XK_h,                    tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,                   XK_l,                    tagmon,         {.i = +1 } },
+	{ MODKEY,                             XK_x,                    movecenter,     {0} },
 	TAGKEYS(                        XK_1, 0)
 	TAGKEYS(                        XK_2, 1)
 	TAGKEYS(                        XK_3, 2)
