@@ -2,7 +2,8 @@
 #include <X11/XF86keysym.h>
 #include <X11/Xutil.h>
 
-#define TERMINAL "ghostty"
+// #define TERMINAL "ghostty"
+#define TERMINAL "kitty"
 #define BROWSER  "google-chrome-stable"
 
 /* appearance */
@@ -43,12 +44,21 @@ typedef struct {
 	const void *cmd;
 } Sp;
 // the window title here must match the rules below
+#ifdef GHOSTTY
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spcalc", "-g", "50x20", "-e", "bc", "-lq", NULL };
 const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spyazi", "--title=spyazi", "--window-height=50", "--window-width=240", "-e", "yazi", NULL };
 const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
 const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spgebitnotes", "--title=spgebitnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
 const char *spcmd6[] = { TERMINAL, "--x11-instance-name=speditscratch", "--title=speditscratch", "--window-height=50", "--window-width=240", "-e", "cd ~/tmp && nvim -c 'bd' 'bd'", NULL };
+#else
+const char *spcmd1[] = {TERMINAL, "--name", "spterm", NULL };
+const char *spcmd2[] = {TERMINAL, "--name", "spcalc", "sh", "-c", "bc -lq", NULL };
+const char *spcmd3[] = { TERMINAL, "--name=spyazi", "--title=spyazi", "yazi", NULL };
+const char *spcmd4[] = { TERMINAL, "--name=spnotes", "--title=spnotes", "sh", "-c", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
+const char *spcmd5[] = { TERMINAL, "--name=spgebitnotes", "--title=spgebitnotes", "sh", "-c", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
+const char *spcmd6[] = { TERMINAL, "--name=speditscratch", "--title=speditscratch", "-d", "~/tmp", "sh", "-c", "nvim -c 'bd' 'bd'", NULL };
+#endif
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
@@ -131,6 +141,7 @@ static const char *volupcmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@",
 static const char *voldowncmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05-", NULL };
 static const char *volmutecmd[] = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
 static const char *matrix_cmd[]  = { "cmatrix", "-f", NULL };
+static const char *layoutmenu_cmd = "layoutmenu.sh";
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -173,6 +184,7 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,                   XK_d,                    setlayout,      {.v = &layouts[6]} },            // deck
     // { MODKEY|ShiftMask,                XK_u,                    setlayout,      {.v = &layouts[7]} },            // bstack
     // { MODKEY|ShiftMask,                XK_o,                    setlayout,      {.v = &layouts[8]} },            // bstackhoriz
+    { MODKEY|ControlMask,                 XK_l,                    layoutmenu,     {0} },
 	{ MODKEY|ControlMask,                 XK_comma,                cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,                 XK_period,               cyclelayout,    {.i = +1 } },
 	{ MODKEY,                             XK_space,                setlayout,      {0} },
@@ -230,6 +242,7 @@ static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,          0,              Button3,        layoutmenu,     {0} },
 	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },

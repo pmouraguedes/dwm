@@ -129,6 +129,7 @@ static const char *volupcmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@",
 static const char *voldowncmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05-", NULL };
 static const char *volmutecmd[] = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
 static const char *matrix_cmd[]  = { "cmatrix", "-f", NULL };
+static const char *layoutmenu_cmd = "layoutmenu.sh";
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -171,6 +172,7 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,                   XK_d,                    setlayout,      {.v = &layouts[6]} },            // deck
     // { MODKEY|ShiftMask,                XK_u,                    setlayout,      {.v = &layouts[7]} },            // bstack
     // { MODKEY|ShiftMask,                XK_o,                    setlayout,      {.v = &layouts[8]} },            // bstackhoriz
+    { MODKEY|ControlMask,                 XK_l,                    layoutmenu,     {0} },
 	{ MODKEY|ControlMask,                 XK_comma,                cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,                 XK_period,               cyclelayout,    {.i = +1 } },
 	{ MODKEY,                             XK_space,                setlayout,      {0} },
@@ -227,6 +229,7 @@ static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,          0,              Button3,        layoutmenu,     {0} },
 	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
