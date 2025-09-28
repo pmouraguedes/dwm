@@ -166,8 +166,8 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,                   XK_b,                    toggleextrabar, {0} },
 	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstackvis,  {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_j,      focusstackhid,  {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,      focusstackhid,  {.i = -1 } },
+	// { MODKEY|ShiftMask,             XK_j,      focusstackhid,  {.i = +1 } },
+	// { MODKEY|ShiftMask,             XK_k,      focusstackhid,  {.i = -1 } },
 	{ MODKEY,                             XK_o,                    incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,                   XK_o,                    incnmaster,     {.i = -1 } },
     { MODKEY,                             XK_comma,                setmfact,       {.f = -0.05} },                  // Shrink master window
