@@ -209,7 +209,7 @@ static void focus(Client *c);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
 static void focusstackvis(const Arg *arg);
-static void focusstackhid(const Arg *arg);
+// static void focusstackhid(const Arg *arg);
 static void focusstack(int inc, int vis);
 static Atom getatomprop(Client *c, Atom prop);
 static Picture geticonprop(Window w, unsigned int *icw, unsigned int *ich);
@@ -1057,9 +1057,8 @@ drawbar(Monitor *m)
 				}
                 char name[258];
                 sprintf(name, "%s", c->name);
-				// drw_text(drw, x, 0, tabw, bh, lrpad / 2, name, 0);
-                drw_text(drw, x, 0, tabw, bh, lrpad / 2 + (m->sel->icon ? m->sel->icw + ICONSPACING : 0), name, 0);
-                if (m->sel->icon) drw_pic(drw, x + lrpad / 2, (bh - m->sel->ich) / 2, m->sel->icw, m->sel->ich, m->sel->icon);
+                drw_text(drw, x, 0, tabw, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), name, 0);
+                if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
 				x += tabw;
 			}
 		}
@@ -1171,10 +1170,10 @@ focusstackvis(const Arg *arg) {
 	focusstack(arg->i, 0);
 }
 
-void
-focusstackhid(const Arg *arg) {
-	focusstack(arg->i, 1);
-}
+// void
+// focusstackhid(const Arg *arg) {
+// 	focusstack(arg->i, 1);
+// }
 
 void
 focusstack(int inc, int hid)
