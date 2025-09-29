@@ -2,7 +2,8 @@
 #include <X11/XF86keysym.h>
 #include <X11/Xutil.h>
 
-#define TERMINAL "ghostty"
+// #define TERMINAL "ghostty"
+#define TERMINAL "kitty"
 #define BROWSER  "google-chrome-stable"
 
 /* appearance */
@@ -15,10 +16,12 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray             = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no standard bar */
 static const int topbar             = 1;        /* 0 means standard bar at bottom */
-static const int extrabar           = 0;        /* 0 means no extra bar */
+static const int extrabar           = 1;        /* 0 means no extra bar */
 static const char statussep         = ';';      /* separator between statuses */
 #define ICONSIZE bh   /* icon size */
 #define ICONSPACING 12 /* space between icon and title */
+static const int vertpad            = 10;       /* vertical padding of bar */
+static const int sidepad            = 10;       /* horizontal padding of bar */
 static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=10", "Noto Sans:size=10", "Noto Color Emoji:size=15" };
 static const char dmenufont[]            = "monospace:size=11";
 static const char col_gray1[]            = "#222222";
@@ -41,12 +44,21 @@ typedef struct {
 	const void *cmd;
 } Sp;
 // the window title here must match the rules below
+#ifdef GHOSTTY
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spcalc", "-g", "50x20", "-e", "bc", "-lq", NULL };
 const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spyazi", "--title=spyazi", "--window-height=50", "--window-width=240", "-e", "yazi", NULL };
 const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
 const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spgebitnotes", "--title=spgebitnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
 const char *spcmd6[] = { TERMINAL, "--x11-instance-name=speditscratch", "--title=speditscratch", "--window-height=50", "--window-width=240", "-e", "cd ~/tmp && nvim -c 'bd' 'bd'", NULL };
+#else
+const char *spcmd1[] = {TERMINAL, "--name", "spterm", NULL };
+const char *spcmd2[] = {TERMINAL, "--name", "spcalc", "sh", "-c", "bc -lq", NULL };
+const char *spcmd3[] = { TERMINAL, "--name=spyazi", "--title=spyazi", "yazi", NULL };
+const char *spcmd4[] = { TERMINAL, "--name=spnotes", "--title=spnotes", "sh", "-c", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
+const char *spcmd5[] = { TERMINAL, "--name=spgebitnotes", "--title=spgebitnotes", "sh", "-c", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
+const char *spcmd6[] = { TERMINAL, "--name=speditscratch", "--title=speditscratch", "-d", "~/tmp", "sh", "-c", "nvim -c 'bd' 'bd'", NULL };
+#endif
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
@@ -131,6 +143,7 @@ static const char *volmutecmd[] = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@",
 static const char *matrix_cmd[]  = { "cmatrix", "-f", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 
+#include "movestack.c"
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	//    STACKKEYS(MODKEY,               focus)
@@ -154,12 +167,14 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,                   XK_b,                    toggleextrabar, {0} },
 	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstackvis,  {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_j,      focusstackhid,  {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,      focusstackhid,  {.i = -1 } },
+	// { MODKEY|ShiftMask,             XK_j,      focusstackhid,  {.i = +1 } },
+	// { MODKEY|ShiftMask,             XK_k,      focusstackhid,  {.i = -1 } },
 	{ MODKEY,                             XK_o,                    incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,                   XK_o,                    incnmaster,     {.i = -1 } },
     { MODKEY,                             XK_comma,                setmfact,       {.f = -0.05} },                  // Shrink master window
     { MODKEY,                             XK_period,               setmfact,       {.f = +0.05} },                  // Grow master window
+	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
 	{ MODKEY,                             XK_space,                zoom,           {0} },
 	{ MODKEY,                             XK_Tab,                  view,           {0} },
 	{ MODKEY,                             XK_q,                    killclient,     {0} },
@@ -183,6 +198,7 @@ static const Key keys[] = {
 	{ MODKEY,                             XK_l,                    focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,                   XK_h,                    tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,                   XK_l,                    tagmon,         {.i = +1 } },
+	{ MODKEY,                             XK_x,                    movecenter,     {0} },
 	TAGKEYS(                        XK_1, 0)
 	TAGKEYS(                        XK_2, 1)
 	TAGKEYS(                        XK_3, 2)

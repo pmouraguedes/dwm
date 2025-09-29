@@ -143,6 +143,7 @@ static const char *volmutecmd[] = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@",
 static const char *matrix_cmd[]  = { "cmatrix", "-f", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 
+#include "movestack.c"
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	//    STACKKEYS(MODKEY,               focus)
@@ -172,6 +173,8 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,                   XK_o,                    incnmaster,     {.i = -1 } },
     { MODKEY,                             XK_comma,                setmfact,       {.f = -0.05} },                  // Shrink master window
     { MODKEY,                             XK_period,               setmfact,       {.f = +0.05} },                  // Grow master window
+	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
 	{ MODKEY,                             XK_space,                zoom,           {0} },
 	{ MODKEY,                             XK_Tab,                  view,           {0} },
 	{ MODKEY,                             XK_q,                    killclient,     {0} },
