@@ -21,7 +21,8 @@ static const char statussep         = ';';      /* separator between statuses */
 #define ICONSIZE bh   /* icon size */
 #define ICONSPACING 12 /* space between icon and title */
 static const int vertpad            = 10;       /* vertical padding of bar */
-static const int sidepad            = 10;       /* horizontal padding of bar */
+static const int sidepad            = 20;       /* horizontal padding of bar */
+static const int windowpad          = 20;       /* gap used to draw windows */
 static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=10", "Noto Sans:size=10", "Noto Color Emoji:size=15" };
 static const char dmenufont[]            = "monospace:size=11";
 static const char col_gray1[]            = "#222222";

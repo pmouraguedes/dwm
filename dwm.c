@@ -904,14 +904,17 @@ deck(Monitor *m) {
 	}
 	else
 		mw = m->ww;
+
 	for(i = my = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if(i < m->nmaster) {
 			h = (m->wh - my) / (MIN(n, m->nmaster) - i);
-			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), False);
+			// resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), False);
+            resize(c, m->wx + windowpad, m->wy + my + vertpad, mw - (2*c->bw) - windowpad, h - (2*c->bw) - 2*vertpad, False);
 			my += HEIGHT(c);
 		}
 		else
-			resize(c, m->wx + mw, m->wy, m->ww - mw - (2*c->bw), m->wh - (2*c->bw), False);
+			// resize(c, m->wx + mw, m->wy, m->ww - mw - (2*c->bw), m->wh - (2*c->bw), False);
+			resize(c, m->wx + mw + windowpad, m->wy + vertpad, m->ww - mw - (2*c->bw) - 2*windowpad, m->wh - (2*c->bw) - 2*vertpad, False);
 }
 
 void
@@ -1608,13 +1611,15 @@ monocle(Monitor *m)
 	unsigned int n = 0;
 	Client *c;
 
-	for (c = m->clients; c; c = c->next)
-		if (ISVISIBLE(c))
-			n++;
-	if (n > 0) /* override layout symbol */
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
-	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
-		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+    for (c = m->clients; c; c = c->next)
+        if (ISVISIBLE(c))
+            n++;
+    if (n > 0) /* override layout symbol */
+        snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
+
+    for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
+        // resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+        resize(c, m->wx + windowpad, m->wy + vertpad, m->ww - 2 * c->bw - 2 * windowpad, m->wh - 2 * c->bw - 2 * vertpad, 0);
 }
 
 void
@@ -2039,7 +2044,7 @@ resizebarwin(Monitor *m) {
 	if (showsystray && m == systraytomon(m) && !systrayonleft)
 		w -= getsystraywidth();
 	XMoveResizeWindow(dpy, m->barwin, m->wx + sp, m->by + vp, w - 2 * sp, bh);
-    XMoveResizeWindow(dpy, m->extrabarwin, m->wx, m->eby, w, bh);
+    XMoveResizeWindow(dpy, m->extrabarwin, m->wx + sp, m->eby, m->ww -2 * sp, bh);
 }
 
 void
@@ -3165,8 +3170,8 @@ updatesystray(void)
 	}
 	w = w ? w + systrayspacing : 1;
 	x -= w;
-	XMoveResizeWindow(dpy, systray->win, x, m->by, w, bh);
-	wc.x = x; wc.y = m->by; wc.width = w; wc.height = bh;
+	XMoveResizeWindow(dpy, systray->win, x - sp, m->by + vp, w, bh);
+	wc.x = x - sp; wc.y = m->by + vp; wc.width = w; wc.height = bh;
 	wc.stack_mode = Above; wc.sibling = m->barwin;
 	XConfigureWindow(dpy, systray->win, CWX|CWY|CWWidth|CWHeight|CWSibling|CWStackMode, &wc);
 	XMapWindow(dpy, systray->win);
