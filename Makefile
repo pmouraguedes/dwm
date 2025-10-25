@@ -9,7 +9,7 @@ OBJ = ${SRC:.c=.o}
 all: dwm
 
 .c.o:
-	${CC} -c ${CFLAGS} $<
+	${CC} -g -O0 -c ${CFLAGS} $<
 
 ${OBJ}: config.h config.mk
 

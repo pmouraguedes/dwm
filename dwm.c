@@ -278,7 +278,7 @@ static void togglescratch(const Arg *arg);
 static void togglesticky(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
-static void togglewin(const Arg *arg);
+// static void togglewin(const Arg *arg);
 static void freeicon(Client *c);
 static void unfocus(Client *c, int setfocus);
 static void unmanage(Client *c, int destroyed);
@@ -2732,22 +2732,22 @@ toggleview(const Arg *arg)
 	updatecurrentdesktop();
 }
 
-void
-togglewin(const Arg *arg)
-{
-	Client *c = (Client*)arg->v;
-
-	if (c == selmon->sel) {
-		hidewin(c);
-		focus(NULL);
-		arrange(c->mon);
-	} else {
-		if (HIDDEN(c))
-			showwin(c);
-		focus(c);
-		restack(selmon);
-	}
-}
+// void
+// togglewin(const Arg *arg)
+// {
+// 	Client *c = (Client*)arg->v;
+//
+// 	if (c == selmon->sel) {
+// 		hidewin(c);
+// 		focus(NULL);
+// 		arrange(c->mon);
+// 	} else {
+// 		if (HIDDEN(c))
+// 			showwin(c);
+// 		focus(c);
+// 		restack(selmon);
+// 	}
+// }
 
 void
 freeicon(Client *c)

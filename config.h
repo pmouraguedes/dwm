@@ -141,7 +141,7 @@ static const char *rofipass_cmd[]  = { "rofi-pass", NULL };
 static const char *volupcmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05+", NULL };
 static const char *voldowncmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.05-", NULL };
 static const char *volmutecmd[] = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
-static const char *matrix_cmd[]  = { "cmatrix", "-f", NULL };
+// static const char *matrix_cmd[]  = { "cmatrix", "-f", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 
 #include "movestack.c"
@@ -158,7 +158,7 @@ static const Key keys[] = {
     { ControlMask|Mod4Mask,               XK_p,                    spawn,          {.v = rofipass_cmd } },
     // { ControlMask|Mod4Mask,            XK_c,                    spawn,          SHCMD("rofi-clip") },
     { MODKEY,                             XK_w,                    spawn,          {.v = (const char*[]){ BROWSER,  NULL } } },
-    { MODKEY,                             XK_m,                    spawn,          {.v = matrix_cmd } },
+    // { MODKEY,                             XK_m,                    spawn,          {.v = matrix_cmd } },
     { MODKEY,                             XK_s,                    togglesticky,   {0} },
 	{ MODKEY,                             XK_d,                    spawn,          {.v = dmenucmd } },
 	{ MODKEY,                             XK_F2,                   spawn,          {.v = runcmd } },
@@ -247,7 +247,6 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkLtSymbol,          0,              Button3,        layoutmenu,     {0} },
-	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkExBarLeftStatus,   0,              Button2,        spawn,          {.v = termcmd } },
