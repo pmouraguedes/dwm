@@ -23,7 +23,7 @@ static const char statussep         = ';';      /* separator between statuses */
 static const int vertpad            = 10;       /* vertical padding of bar */
 static const int sidepad            = 20;       /* horizontal padding of bar */
 static const int windowpad          = 20;       /* gap used to draw windows */
-static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=10", "Noto Sans:size=10", "Noto Color Emoji:size=15" };
+static const char *fonts[]               = { "JetBrainsMono Nerd Font:size=10", "Noto Sans:size=10", "Noto Color Emoji:size=13" };
 static const char dmenufont[]            = "monospace:size=11";
 static const char col_gray1[]            = "#222222";
 static const char col_gray2[]            = "#444444";
@@ -160,11 +160,12 @@ static const Key keys[] = {
     // { ControlMask|Mod4Mask,            XK_c,                    spawn,          SHCMD("rofi-clip") },
     { MODKEY,                             XK_w,                    spawn,          {.v = (const char*[]){ BROWSER,  NULL } } },
     // { MODKEY,                             XK_m,                    spawn,          {.v = matrix_cmd } },
-    { MODKEY,                             XK_s,                    togglesticky,   {0} },
+    { MODKEY|ShiftMask,                             XK_s,                    togglesticky,   {0} },
 	{ MODKEY,                             XK_d,                    spawn,          {.v = dmenucmd } },
 	{ MODKEY,                             XK_F2,                   spawn,          {.v = runcmd } },
 	{ MODKEY,                             XK_Return,               spawn,          {.v = termcmd } },
 	{ Mod1Mask,                           XK_Tab,                  spawn,          {.v = rofiwindowcmd } },
+    { MODKEY,                             XK_s,                    spawn,          SHCMD("slock") },
 	{ MODKEY,                             XK_b,                    togglebar,      {0} },
 	{ MODKEY|ShiftMask,                   XK_b,                    toggleextrabar, {0} },
 	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },
