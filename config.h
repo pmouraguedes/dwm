@@ -31,6 +31,7 @@ static const char col_gray3[]            = "#bbbbbb";
 static const char col_gray4[]            = "#eeeeee";
 static const char col_cyan[]             = "#005577";
 static const char col_red[]              = "#770000";
+
 static const char *colors[][3]           = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -144,6 +145,8 @@ static const char *voldowncmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@
 static const char *volmutecmd[] = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
 // static const char *matrix_cmd[]  = { "cmatrix", "-f", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
+static const char *suspendcmd[] = { "sh", "-c",
+    "slock systemctl suspend; sleep 2; ~/.screenlayout/home3.sh", NULL };
 
 #include "movestack.c"
 static const Key keys[] = {
@@ -153,7 +156,7 @@ static const Key keys[] = {
     { 0,                                  XF86XK_AudioRaiseVolume, spawn,          {.v = volupcmd } },
     { 0,                                  XF86XK_AudioLowerVolume, spawn,          {.v = voldowncmd } },
     { 0,                                  XF86XK_AudioMute,        spawn,          {.v = volmutecmd } },
-    { 0,                                  XK_Print,                spawn,          SHCMD("maim -s -b 5 | xclip -selection clipboard -t image/png") },
+    { 0,                                  XK_Print,                spawn,          SHCMD("maim -s -b 5 | clip-image") },
     { ControlMask|Mod4Mask,               XK_c,                    spawn,          {.v = roficlip_cmd } },
     // { ControlMask|Mod4Mask,            XK_v,                    spawn,          SHCMD("rofi-clip -p") },
     { ControlMask|Mod4Mask,               XK_p,                    spawn,          {.v = rofipass_cmd } },
@@ -166,6 +169,7 @@ static const Key keys[] = {
 	{ MODKEY,                             XK_Return,               spawn,          {.v = termcmd } },
 	{ Mod1Mask,                           XK_Tab,                  spawn,          {.v = rofiwindowcmd } },
     { MODKEY,                             XK_s,                    spawn,          SHCMD("slock") },
+    { MODKEY|ShiftMask, XK_s, spawn, {.v = suspendcmd } },
 	{ MODKEY,                             XK_b,                    togglebar,      {0} },
 	{ MODKEY|ShiftMask,                   XK_b,                    toggleextrabar, {0} },
 	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },

@@ -151,7 +151,7 @@ static const Key keys[] = {
     { 0,                                  XF86XK_AudioRaiseVolume, spawn,          {.v = volupcmd } },
     { 0,                                  XF86XK_AudioLowerVolume, spawn,          {.v = voldowncmd } },
     { 0,                                  XF86XK_AudioMute,        spawn,          {.v = volmutecmd } },
-    { 0,                                  XK_Print,                spawn,          SHCMD("maim -s -b 5 | xclip -selection clipboard -t image/png") },
+    { 0,                                  XK_Print,                spawn,          SHCMD("maim -s -b 5 | clip-image") },
     { ControlMask|Mod4Mask,               XK_c,                    spawn,          {.v = roficlip_cmd } },
     // { ControlMask|Mod4Mask,            XK_v,                    spawn,          SHCMD("rofi-clip -p") },
     { ControlMask|Mod4Mask,               XK_p,                    spawn,          {.v = rofipass_cmd } },
