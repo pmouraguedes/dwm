@@ -246,10 +246,12 @@ static void resizeclient(Client *c, int x, int y, int w, int h);
 static void resizemouse(const Arg *arg);
 static void resizerequest(XEvent *e);
 static void restack(Monitor *m);
+static void restoreclientinfo(Client *c);
 static void run(void);
 static void scan(void);
 static int sendevent(Window w, Atom proto, int m, long d0, long d1, long d2, long d3, long d4);
 static void sendmon(Client *c, Monitor *m);
+static void setclientinfo(Client *c);
 static void setclientstate(Client *c, long state);
 static void setcurrentdesktop(void);
 static void setdesktopnames(void);
@@ -343,6 +345,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 	[UnmapNotify] = unmapnotify
 };
 static Atom wmatom[WMLast], netatom[NetLast], xatom[XLast];
+static Atom clientinfoatom;
 static int running = 1;
 static Cur *cursor[CurLast];
 static Clr **scheme;
@@ -604,8 +607,12 @@ cleanup(void)
 	view(&a);
 	selmon->lt[selmon->sellt] = &foo;
 	for (m = mons; m; m = m->next)
-		while (m->stack)
+		while (m->stack) {
+			/* hidden clients sit off screen; put them back so their
+			 * position survives a restart */
+			XMoveWindow(dpy, m->stack->win, m->stack->x, m->stack->y);
 			unmanage(m->stack, 0);
+		}
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
 	while (mons)
 		cleanupmon(mons);
@@ -1538,6 +1545,7 @@ manage(Window w, XWindowAttributes *wa)
 		c->mon = selmon;
 		applyrules(c);
 	}
+	restoreclientinfo(c);
 
 	if (c->x + WIDTH(c) > c->mon->wx + c->mon->ww)
 		c->x = c->mon->wx + c->mon->ww - WIDTH(c);
@@ -1560,6 +1568,7 @@ manage(Window w, XWindowAttributes *wa)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
 	if (c->isfloating)
 		XRaiseWindow(dpy, c->win);
+	setclientinfo(c);
 	attach(c);
 	attachstack(c);
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
@@ -2158,6 +2167,31 @@ restack(Monitor *m)
 }
 
 void
+restoreclientinfo(Client *c)
+{
+	int format;
+	unsigned long n, extra;
+	unsigned char *p = NULL;
+	long *data;
+	Atom type;
+	Monitor *m;
+
+	if (XGetWindowProperty(dpy, c->win, clientinfoatom, 0L, 3L, False, XA_CARDINAL,
+		&type, &format, &n, &extra, &p) != Success || !p)
+		return;
+	if (n == 3 && format == 32) {
+		data = (long *)p;
+		if (data[0] & TAGMASK)
+			c->tags = data[0] & TAGMASK;
+		for (m = mons; m && m->num != data[1]; m = m->next);
+		if (m)
+			c->mon = m;
+		c->isfloating = data[2] != 0;
+	}
+	XFree(p);
+}
+
+void
 run(void)
 {
 	XEvent ev;
@@ -2205,10 +2239,22 @@ sendmon(Client *c, Monitor *m)
 	detachstack(c);
 	c->mon = m;
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
+	setclientinfo(c);
 	attach(c);
 	attachstack(c);
 	focus(NULL);
 	arrange(NULL);
+}
+
+void
+setclientinfo(Client *c)
+{
+	/* remembered on the window itself so it survives a dwm restart */
+	long data[] = { c->tags, c->mon->num,
+		c->isfullscreen ? c->oldstate : c->isfloating };
+
+	XChangeProperty(dpy, c->win, clientinfoatom, XA_CARDINAL, 32,
+		PropModeReplace, (unsigned char *)data, 3);
 }
 
 void
@@ -2395,6 +2441,7 @@ setup(void)
 	wmatom[WMDelete] = XInternAtom(dpy, "WM_DELETE_WINDOW", False);
 	wmatom[WMState] = XInternAtom(dpy, "WM_STATE", False);
 	wmatom[WMTakeFocus] = XInternAtom(dpy, "WM_TAKE_FOCUS", False);
+	clientinfoatom = XInternAtom(dpy, "_DWM_CLIENT_INFO", False);
 	netatom[NetActiveWindow] = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
 	netatom[NetSupported] = XInternAtom(dpy, "_NET_SUPPORTED", False);
 	netatom[NetSystemTray] = XInternAtom(dpy, "_NET_SYSTEM_TRAY_S0", False);
@@ -2560,6 +2607,7 @@ tag(const Arg *arg)
 {
 	if (selmon->sel && arg->ui & TAGMASK) {
 		selmon->sel->tags = arg->ui & TAGMASK;
+		setclientinfo(selmon->sel);
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -2638,6 +2686,7 @@ togglefloating(const Arg *arg)
 	if (selmon->sel->isfullscreen) /* no support for fullscreen windows */
 		return;
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
+	setclientinfo(selmon->sel);
 	if (selmon->sel->isfloating)
 		resize(selmon->sel, selmon->sel->x, selmon->sel->y,
 			selmon->sel->w, selmon->sel->h, 0);
@@ -2689,6 +2738,7 @@ toggletag(const Arg *arg)
 	newtags = selmon->sel->tags ^ (arg->ui & TAGMASK);
 	if (newtags) {
 		selmon->sel->tags = newtags;
+		setclientinfo(selmon->sel);
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -2810,6 +2860,8 @@ unmapnotify(XEvent *e)
 		 * with our map, so unmap the window ourselves */
 		if (ev->send_event)
 			XUnmapWindow(dpy, c->win);
+		/* placement is only kept across restarts, not across hide/show */
+		XDeleteProperty(dpy, c->win, clientinfoatom);
 		unmanage(c, 0);
 	}
 	else if ((c = wintosystrayicon(ev->window))) {
@@ -2950,6 +3002,7 @@ updategeom(void)
 				m->clients = c->next;
 				detachstack(c);
 				c->mon = mons;
+				setclientinfo(c);
 				attach(c);
 				attachstack(c);
 			}
