@@ -2805,10 +2805,12 @@ unmapnotify(XEvent *e)
 	XUnmapEvent *ev = &e->xunmap;
 
 	if ((c = wintoclient(ev->window))) {
+		/* a synthetic UnmapNotify is the client asking to be withdrawn
+		 * (ICCCM 4.1.4); its own unmap may have been a no-op if it raced
+		 * with our map, so unmap the window ourselves */
 		if (ev->send_event)
-			setclientstate(c, WithdrawnState);
-		else
-			unmanage(c, 0);
+			XUnmapWindow(dpy, c->win);
+		unmanage(c, 0);
 	}
 	else if ((c = wintosystrayicon(ev->window))) {
 		/* KLUDGE! sometimes icons occasionally unmap their windows, but do
