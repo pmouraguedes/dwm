@@ -165,6 +165,7 @@ static const Key keys[] = {
     // { MODKEY,                    XK_m,                    spawn,          {.v = matrix_cmd } },
     { MODKEY|ShiftMask,             XK_s,                    togglesticky,   {0} },
 	{ MODKEY,                       XK_d,                    spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_F1,                   spawn,          SHCMD("rofi-dwm-keys") },                // keybindings cheatsheet
 	{ MODKEY,                       XK_F2,                   spawn,          {.v = runcmd } },
 	{ MODKEY,                       XK_Return,               spawn,          {.v = termcmd } },
 	{ Mod1Mask,                     XK_Tab,                  spawn,          {.v = rofiwindowcmd } },
