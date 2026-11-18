@@ -166,6 +166,7 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_s,                    togglesticky,   {0} },
 	{ MODKEY,                       XK_d,                    spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_F1,                   spawn,          SHCMD("rofi-dwm-keys") },                // keybindings cheatsheet
+	{ MODKEY,                       XK_p,                    spawn,          SHCMD("sh ~/.screenlayout/home3.sh") },  // Re-apply screen layout
 	{ MODKEY,                       XK_F2,                   spawn,          {.v = runcmd } },
 	{ MODKEY,                       XK_Return,               spawn,          {.v = termcmd } },
 	{ Mod1Mask,                     XK_Tab,                  spawn,          {.v = rofiwindowcmd } },
