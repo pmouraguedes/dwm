@@ -4,7 +4,7 @@
 
 // #define TERMINAL "ghostty"
 #define TERMINAL "kitty"
-#define BROWSER  "google-chrome-stable"
+#define BROWSER  "brave"
 
 /* appearance */
 static const unsigned int borderpx       = 4;        /* border pixel of windows */
