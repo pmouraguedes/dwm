@@ -208,7 +208,8 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7, 6)
 	TAGKEYS(                        XK_8, 7)
 	TAGKEYS(                        XK_9, 8)
-	{ MODKEY|ShiftMask,                   XK_q,                    quit,           {0} },
+	{ MODKEY|ShiftMask,                   XK_q,                    quit,           {.i = 0} },
+	{ MODKEY|ControlMask|ShiftMask,       XK_q,                    quit,           {.i = 1} },
 	// { MODKEY|ShiftMask,                XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "htop",       NULL } } },
 	// { MODKEY,                          XK_r,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "yazi",       NULL } } },
 	// { MODKEY|ShiftMask,                XK_w,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "connmanctl", NULL } } },
