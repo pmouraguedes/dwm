@@ -49,26 +49,23 @@ typedef struct {
 #ifdef GHOSTTY
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spcalc", "-g", "50x20", "-e", "bc", "-lq", NULL };
-const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spyazi", "--title=spyazi", "--window-height=50", "--window-width=240", "-e", "yazi", NULL };
-const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
-const char *spcmd5[] = { TERMINAL, "--x11-instance-name=spgebitnotes", "--title=spgebitnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
-const char *spcmd6[] = { TERMINAL, "--x11-instance-name=speditscratch", "--title=speditscratch", "--window-height=50", "--window-width=240", "-e", "cd ~/tmp && nvim -c 'bd' 'bd'", NULL };
+const char *spcmd3[] = { TERMINAL, "--x11-instance-name=spnotes", "--title=spnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
+const char *spcmd4[] = { TERMINAL, "--x11-instance-name=spgebitnotes", "--title=spgebitnotes", "--window-height=50", "--window-width=240", "-e", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
+const char *spcmd5[] = { TERMINAL, "--x11-instance-name=speditscratch", "--title=speditscratch", "--window-height=50", "--window-width=240", "-e", "cd ~/tmp && nvim -c 'bd' 'bd'", NULL };
 #else
 const char *spcmd1[] = { TERMINAL, "--name", "spterm", NULL };
 const char *spcmd2[] = { TERMINAL, "--name", "spcalc", "sh", "-c", "bc -lq", NULL };
-const char *spcmd3[] = { TERMINAL, "--name=spyazi", "--title=spyazi", "yazi", NULL };
-const char *spcmd4[] = { TERMINAL, "--name=spnotes", "--title=spnotes", "sh", "-c", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
-const char *spcmd5[] = { TERMINAL, "--name=spgebitnotes", "--title=spgebitnotes", "sh", "-c", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
-const char *spcmd6[] = { TERMINAL, "--name=speditscratch", "--title=speditscratch", "-d", "~/tmp", "sh", "-c", "nvim -c 'bd' 'bd'", NULL };
+const char *spcmd3[] = { TERMINAL, "--name=spnotes", "--title=spnotes", "sh", "-c", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/personal'", NULL };
+const char *spcmd4[] = { TERMINAL, "--name=spgebitnotes", "--title=spgebitnotes", "sh", "-c", "nvim --cmd 'cd ~/Dropbox/slug/PMG/notes/Obsidian/gebit/Gebit'", NULL };
+const char *spcmd5[] = { TERMINAL, "--name=speditscratch", "--title=speditscratch", "-d", "~/tmp", "sh", "-c", "nvim -c 'bd' 'bd'", NULL };
 #endif
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",        spcmd1},
 	{"spcalc",        spcmd2},
-	{"spyazi",        spcmd3},
-    {"spnotes",       spcmd4},
-    {"spgebitnotes",  spcmd5},
-    {"speditscratch", spcmd6},
+    {"spnotes",       spcmd3},
+    {"spgebitnotes",  spcmd4},
+    {"speditscratch", spcmd5},
 };
 
 /* tagging */
@@ -87,10 +84,9 @@ static const Rule rules[] = {
 	{ NULL,      NULL,            "Lane Proxy 4711",                       1 << 3,   1, -1 },
 	{ NULL,      "spterm",        NULL,                                    SPTAG(0), 1, -1 },
 	{ NULL,      "spcalc",        NULL,                                    SPTAG(1), 1, -1 },
-	{ NULL,      "spyazi",        NULL,                                    SPTAG(2), 1, -1 },
-    { NULL,      "spnotes",       NULL,                                    SPTAG(3), 1, -1 },
-    { NULL,      "spgebitnotes",  NULL,                                    SPTAG(4), 1, -1 },
-    { NULL,      "speditscratch", NULL,                                    SPTAG(5), 1, -1 },
+    { NULL,      "spnotes",       NULL,                                    SPTAG(2), 1, -1 },
+    { NULL,      "spgebitnotes",  NULL,                                    SPTAG(3), 1, -1 },
+    { NULL,      "speditscratch", NULL,                                    SPTAG(4), 1, -1 },
 };
 
 /* layout(s) */
@@ -215,10 +211,10 @@ static const Key keys[] = {
 	// { MODKEY|ShiftMask,          XK_w,                    spawn,          {.v = (const char*[]){ TERMINAL, "-e", "connmanctl", NULL } } },
 	{ MODKEY|ShiftMask,             XK_Return,               togglescratch,  {.ui = 0 } },                    // terminal
 	{ MODKEY,                       XK_apostrophe,           togglescratch,  {.ui = 1 } },                    // calculator
-	{ MODKEY,                       XK_e,                    togglescratch,  {.ui = 2 } },                    // yazi
-    { MODKEY,                       XK_n,                    togglescratch,  {.ui = 3 } },                    // notes
-    { MODKEY|ShiftMask,             XK_n,                    togglescratch,  {.ui = 4 } },                    // gebit notes
-    { MODKEY|ShiftMask,             XK_e,                    togglescratch,  {.ui = 5 } },                    // scratch edit
+	{ MODKEY,                       XK_e,                    spawn,          SHCMD("thunar") },               // thunar file manager
+    { MODKEY,                       XK_n,                    togglescratch,  {.ui = 2 } },                    // notes
+    { MODKEY|ShiftMask,             XK_n,                    togglescratch,  {.ui = 3 } },                    // gebit notes
+    { MODKEY|ShiftMask,             XK_e,                    togglescratch,  {.ui = 4 } },                    // scratch edit
 	{ MODKEY,                       XK_Down,                 moveresize,     {.v = "0x 75y 0w 0h" } },
 	{ MODKEY,                       XK_Up,                   moveresize,     {.v = "0x -75y 0w 0h" } },
 	{ MODKEY,                       XK_Right,                moveresize,     {.v = "75x 0y 0w 0h" } },
